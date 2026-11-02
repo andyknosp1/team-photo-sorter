@@ -1,0 +1,46 @@
+name: demo site
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get install -y fonts-dejavu-core
+      - run: pip install numpy scipy pillow cryptography
+      # illustrated players only; see examples/demo/make_demo.py
+      - name: Build the demo site
+        env:
+          PYTHONPATH: ${{ github.workspace }}/src
+          TPS_PASSWORD: lakeview-demo
+        run: |
+          python examples/demo/make_demo.py demo-project
+          cd demo-project
+          python -m team_photo_sorter.cli cluster
+          python -m team_photo_sorter.cli images
+          python -m team_photo_sorter.cli build
+          touch site/public/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: demo-project/site/public
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

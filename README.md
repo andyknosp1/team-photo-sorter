@@ -9,7 +9,11 @@ kid. `team-photo-sorter` finds and groups the faces in every photo **on your own
 computer**, then builds a static site where each family picks their player and
 gets that player's photos, game by game.
 
-![The generated site, with sample data](docs/screenshot.png)
+![Unlock the site, pick a game, name a player, browse their photos](https://raw.githubusercontent.com/andyknosp1/team-photo-sorter/main/docs/demo.gif)
+
+**[Try the demo site](https://andyknosp1.github.io/team-photo-sorter/)** (password `lakeview-demo`).
+The demo team's players are illustrations, not real people. It's built by
+[examples/demo/make_demo.py](https://github.com/andyknosp1/team-photo-sorter/blob/main/examples/demo/make_demo.py) on every push.
 
 - **Runs locally.** Face detection and grouping happen on your machine. No photo
   or face data is sent to a face-recognition service.
@@ -28,7 +32,7 @@ gets that player's photos, game by game.
   anything unchanged, so hosts only re-upload what's new. It grew out of a tool
   used for a full season: about 53,000 photos across 17 games.
 
-> **Read [docs/privacy.md](docs/privacy.md) before using this with photos of minors.**
+> **Read [docs/privacy.md](https://github.com/andyknosp1/team-photo-sorter/blob/main/docs/privacy.md) before using this with photos of minors.**
 > This tool creates face embeddings, which many jurisdictions treat as biometric data.
 > It is meant for a team photographer sharing with that team's families, with the
 > team's knowledge.
@@ -39,11 +43,8 @@ Requires Python 3.10+ and 4 GB of RAM. The biggest games, around 20,000
 detected faces, need most of that.
 
 ```bash
-git clone https://github.com/andyknosp1/team-photo-sorter.git
-cd team-photo-sorter
 python -m venv .venv && source .venv/bin/activate
-pip install -e .                         # HEIC photos from iPhones: pip install -e ".[heic]"
-cd ..
+pip install team-photo-sorter            # HEIC photos from iPhones: "team-photo-sorter[heic]"
 
 mkdir my-team && cd my-team
 tps init                                 # writes team.toml and a .gitignore
@@ -51,7 +52,7 @@ tps init                                 # writes team.toml and a .gitignore
 
 Put each game's photos in its own folder, then edit `team.toml`: team name,
 colours, roster, and one `[[event]]` per game pointing at its folder. The
-comments in [the example config](examples/team.toml) explain every setting.
+comments in [the example config](https://github.com/andyknosp1/team-photo-sorter/blob/main/examples/team.toml) explain every setting.
 
 ```bash
 tps all            # scan faces, group them, make thumbnails, build the site
@@ -62,10 +63,22 @@ tps all            # scan faces, group them, make thumbnails, build the site
 offline. To skip the prompt, set the `TPS_PASSWORD` environment variable.
 
 The site is in `site/public/`. Deploy that folder to any static host; see
-[docs/hosting.md](docs/hosting.md). Share the link and the password with families.
+[docs/hosting.md](https://github.com/andyknosp1/team-photo-sorter/blob/main/docs/hosting.md). Share the link and the password with families.
 
 The first run downloads InsightFace's face models (a few hundred MB) into
-`~/.insightface`. Check their licence; see [NOTICE](NOTICE).
+`~/.insightface`. Check their licence; see [NOTICE](https://github.com/andyknosp1/team-photo-sorter/blob/main/NOTICE).
+
+Tested with InsightFace 1.0.1. InsightFace 2.x reworked its API and isn't
+supported yet.
+
+## Working on the code
+
+```bash
+git clone https://github.com/andyknosp1/team-photo-sorter.git
+cd team-photo-sorter
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]" && pytest
+```
 
 ## Adding a game
 
@@ -102,7 +115,7 @@ everyone:
 
 You can also pre-name a player in every game from a few reference photos of
 their face. Add a `[[seed]]` to the config and see
-[docs/how-it-works.md](docs/how-it-works.md#reference-photos).
+[docs/how-it-works.md](https://github.com/andyknosp1/team-photo-sorter/blob/main/docs/how-it-works.md#reference-photos).
 
 ## Linking to photos hosted elsewhere
 
@@ -111,15 +124,15 @@ long side, about 200 KB). If the originals are already in a shared album
 somewhere, give the event a `links` CSV with columns
 `filename,view_url,download_url`. The site then links each photo there, and
 you can set `full_size = 0` to keep the site small. See
-[examples/links.csv](examples/links.csv).
+[examples/links.csv](https://github.com/andyknosp1/team-photo-sorter/blob/main/examples/links.csv).
 
 ## Documentation
 
-- [How it works](docs/how-it-works.md): the pipeline and the decisions behind it
-- [Hosting](docs/hosting.md): Firebase, Netlify, Cloudflare Pages and GitHub Pages, plus free-tier sizing
-- [Security](docs/security.md): what the password protects and what it doesn't
-- [Privacy](docs/privacy.md): photos of minors, consent and biometric data
-- [Configuration reference](docs/configuration.md)
+- [How it works](https://github.com/andyknosp1/team-photo-sorter/blob/main/docs/how-it-works.md): the pipeline and the decisions behind it
+- [Hosting](https://github.com/andyknosp1/team-photo-sorter/blob/main/docs/hosting.md): Firebase, Netlify, Cloudflare Pages and GitHub Pages, plus free-tier sizing
+- [Security](https://github.com/andyknosp1/team-photo-sorter/blob/main/docs/security.md): what the password protects and what it doesn't
+- [Privacy](https://github.com/andyknosp1/team-photo-sorter/blob/main/docs/privacy.md): photos of minors, consent and biometric data
+- [Configuration reference](https://github.com/andyknosp1/team-photo-sorter/blob/main/docs/configuration.md)
 
 ## Limitations
 
@@ -135,5 +148,5 @@ you can set `full_size = 0` to keep the site small. See
 
 ## License
 
-[Apache License 2.0](LICENSE). Copyright 2026 Andy Knosp. The face models are not
-part of this project and have their own licence; see [NOTICE](NOTICE).
+[Apache License 2.0](https://github.com/andyknosp1/team-photo-sorter/blob/main/LICENSE). Copyright 2026 Andy Knosp. The face models are not
+part of this project and have their own licence; see [NOTICE](https://github.com/andyknosp1/team-photo-sorter/blob/main/NOTICE).

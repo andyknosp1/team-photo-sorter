@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "team-photo-sorter"
-version = "0.1.0"
+version = "0.1.1"
 description = "Sort a team photographer's photos by player and publish them as a password-protected static site."
 readme = "README.md"
 license = "Apache-2.0"
@@ -22,7 +22,7 @@ dependencies = [
   "scipy>=1.10",
   "pillow>=10",
   "cryptography>=41",
-  "insightface>=0.7.3",
+  "insightface>=1.0,<2",
   "onnxruntime>=1.16",
   "tomli>=2; python_version < '3.11'",
 ]

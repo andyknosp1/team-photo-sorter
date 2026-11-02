@@ -72,10 +72,12 @@ def detect(app, path: Path):
         im = im.resize((round(w0 * s), round(h0 * s)), Image.BILINEAR)
     bgr = np.asarray(im)[:, :, ::-1].copy()
     width = bgr.shape[1]
+    # store boxes in DETECT_SIDE space even when the photo is smaller than that
+    k = DETECT_SIDE / max(bgr.shape[0], bgr.shape[1])
     out = []
     for f in app.get(bgr):
         x1, y1, x2, y2 = (float(v) for v in f.bbox)
-        out.append({"bbox": [round(v, 1) for v in (x1, y1, x2, y2)],
+        out.append({"bbox": [round(v * k, 1) for v in (x1, y1, x2, y2)],
                     "det": round(float(f.det_score), 3),
                     "rel_w": round((x2 - x1) / width, 4),
                     "emb": enc(f.normed_embedding)})
