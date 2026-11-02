@@ -43,7 +43,9 @@ class Event:
     def photo_files(self) -> list[str]:
         """Photo file names in the event folder (not recursive), sorted."""
         if not self.photos.is_dir():
-            raise ConfigError(f"event {self.id!r}: photo folder not found: {self.photos}")
+            raise ConfigError(f"event {self.id!r}: photo folder not found: {self.photos}\n"
+                              f"  Fix the `photos =` line of this [[event]] in your team.toml "
+                              f"(paths are relative to the team.toml file).")
         return sorted(p.name for p in self.photos.iterdir()
                       if p.is_file() and p.suffix.lower() in PHOTO_EXTS
                       and not p.name.startswith("."))

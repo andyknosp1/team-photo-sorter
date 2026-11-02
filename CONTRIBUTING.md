@@ -7,7 +7,7 @@ Thanks for helping! This project is small, so the process is simple.
 ```bash
 git clone https://github.com/andyknosp1/team-photo-sorter.git
 cd team-photo-sorter
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pytest
 ```

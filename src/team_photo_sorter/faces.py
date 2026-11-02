@@ -6,8 +6,11 @@ use (see NOTICE).
 """
 from __future__ import annotations
 
+import contextlib
+import io
 import os
 import time
+import warnings
 from multiprocessing import Pool
 from pathlib import Path
 
@@ -46,15 +49,44 @@ def _one_thread_onnxruntime():
     ort.InferenceSession = OneThread
 
 
-def load_model(models_root: Path, one_thread: bool = True):
+def _quiet_warnings():
+    # InsightFace's alignment code triggers a scikit-image deprecation warning
+    # on every face; it is harmless and only alarms people.
+    warnings.filterwarnings("ignore", category=FutureWarning)
+    warnings.filterwarnings("ignore", message=".*deprecated.*", module="insightface")
+
+
+def models_ready(models_root: Path) -> bool:
+    d = Path(models_root) / "models" / "buffalo_l"
+    return (d / "det_10g.onnx").exists() and (d / "w600k_r50.onnx").exists()
+
+
+def load_model(models_root: Path, one_thread: bool = True, quiet: bool = True):
+    """Load SCRFD + ArcFace. InsightFace downloads the model pack on first use."""
     if one_thread:
         _one_thread_onnxruntime()
+    _quiet_warnings()
     from insightface.app import FaceAnalysis
-    app = FaceAnalysis(name="buffalo_l", root=str(models_root),
-                       providers=["CPUExecutionProvider"],
-                       allowed_modules=["detection", "recognition"])
-    app.prepare(ctx_id=-1, det_size=(640, 640))
+    # InsightFace prints a line per model file it loads; keep the console tidy
+    with contextlib.redirect_stdout(io.StringIO()) if quiet else contextlib.nullcontext():
+        app = FaceAnalysis(name="buffalo_l", root=str(models_root),
+                           providers=["CPUExecutionProvider"],
+                           allowed_modules=["detection", "recognition"])
+        app.prepare(ctx_id=-1, det_size=(640, 640))
     return app
+
+
+def ensure_models(models_root: Path, progress=print) -> None:
+    """Download the model pack once, before any worker starts.
+
+    Without this, every scanning worker would download the same 280 MB file
+    at the same time, into the same place.
+    """
+    if models_ready(models_root):
+        return
+    progress(f"Downloading the InsightFace face models (about 280 MB, one time) into {models_root} ...")
+    load_model(models_root, one_thread=False)
+    progress("Face models ready.")
 
 
 def _init(models_root):
@@ -98,17 +130,28 @@ def scan_event(store: EventStore, folder: Path, names: list[str], models_root: P
     todo = [str(folder / n) for n in names if n not in store.scanned()]
     if not todo:
         return 0
-    t0, done = time.time(), 0
-    with Pool(workers, initializer=_init, initargs=(str(models_root),)) as pool:
+    ensure_models(models_root, progress)
+    t0, done = None, 0
+    pool = Pool(workers, initializer=_init, initargs=(str(models_root),))
+    finished = False
+    try:
         for name, faces, w, h in pool.imap_unordered(_work, todo, chunksize=2):
             store.put(name, faces, w, h)
             done += 1
-            if done % 50 == 0:
+            if t0 is None:          # time scanning only, not model start-up
+                t0, first = time.time(), done
+            elif done % 50 == 0:
                 store.commit()
-                rate = (time.time() - t0) / done
+                rate = (time.time() - t0) / (done - first)
                 progress(f"  {done}/{len(todo)}  ({rate:.2f} s/photo, "
                          f"~{rate * (len(todo) - done) / 60:.0f} min left)")
-    store.commit()
+        finished = True
+    finally:
+        # close + join lets workers exit cleanly (no "leaked semaphore" warnings);
+        # terminate only if we were interrupted
+        pool.close() if finished else pool.terminate()
+        pool.join()
+        store.commit()
     return done
 
 
@@ -120,6 +163,7 @@ def reference_template(folder: Path, models_root: Path) -> np.ndarray:
     """
     from .config import PHOTO_EXTS
     from .store import dec
+    ensure_models(models_root)
     app = load_model(models_root, one_thread=False)
     embs = []
     for p in sorted(folder.iterdir()):

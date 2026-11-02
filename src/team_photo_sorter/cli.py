@@ -38,15 +38,57 @@ def _password(confirm: bool) -> str:
     return pw
 
 
+def _events_from_photos(root: Path) -> list[tuple[str, str, str, str]]:
+    """One event per subfolder of ./photos that contains photos.
+
+    A folder named like "2026-09-12 vs North" gives date 2026-09-12 and
+    title "vs North"; otherwise the title is the folder name and the date is
+    the newest photo's modification date.
+    """
+    import re
+    from datetime import date
+    photos = root / "photos"
+    out = []
+    if not photos.is_dir():
+        return out
+    for d in sorted(p for p in photos.iterdir() if p.is_dir() and not p.name.startswith(".")):
+        files = [f for f in d.iterdir() if f.suffix.lower() in C.PHOTO_EXTS]
+        if not files:
+            continue
+        m = re.match(r"^(\d{4}-\d{2}-\d{2})[ _-]*(.*)$", d.name)
+        if m:
+            day, title = m.group(1), (m.group(2) or d.name)
+        else:
+            day = date.fromtimestamp(max(f.stat().st_mtime for f in files)).isoformat()
+            title = d.name
+        slug = re.sub(r"[^A-Za-z0-9]+", "-", d.name).strip("-").lower() or "event"
+        out.append((slug, title.replace('"', "'"), day, f"photos/{d.name}"))
+    return out
+
+
 def cmd_init(a):
     dst = Path(a.config)
     if dst.exists():
         sys.exit(f"{dst} already exists")
-    dst.write_text(EXAMPLE.read_text())
+    text = EXAMPLE.read_text()
+    found = _events_from_photos(dst.resolve().parent)
+    if found:
+        start = text.index("# One [[event]] per game")
+        end = text.index("# Optional: pre-name")
+        block = ("# One [[event]] per game. These were found in ./photos; check the titles and dates.\n"
+                 + "".join(f'[[event]]\nid = "{i}"\ntitle = "{t}"\ndate = {d}\nphotos = "{p}"\n\n'
+                           for i, t, d, p in found))
+        text = text[:start] + block + text[end:]
+    dst.write_text(text)
     gi = dst.parent / ".gitignore"
     if not gi.exists():
         gi.write_text(".tps/\nsite/\n")
-    print(f"Wrote {dst}. Edit it, then run: tps scan")
+    if found:
+        print(f"Wrote {dst} with {len(found)} game(s) found in ./photos. "
+              "Check the team name, roster and game titles, then run: tps all")
+    else:
+        print(f"Wrote {dst}. Put each game's photos in its own folder under ./photos "
+              "(e.g. photos/2026-09-12 vs North), or edit the [[event]] entries, then run: tps all")
 
 
 def cmd_scan(a):

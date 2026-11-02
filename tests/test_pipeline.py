@@ -104,3 +104,26 @@ def test_config_validation(tmp_path):
 def test_palette_is_valid_hex():
     pal = palette("#1f3a5f", "#f2b33d")
     assert all(v.startswith("#") and len(v) == 7 for v in pal.values())
+
+
+def test_init_finds_games_in_photos_folder(tmp_path, monkeypatch):
+    from PIL import Image
+    from team_photo_sorter import cli
+    for folder in ("2026-09-12 vs North", "scrimmage", "empty"):
+        (tmp_path / "photos" / folder).mkdir(parents=True)
+    for folder in ("2026-09-12 vs North", "scrimmage"):
+        Image.new("RGB", (10, 10)).save(tmp_path / "photos" / folder / "a.jpg")
+    monkeypatch.chdir(tmp_path)
+    cli.main(["init"])
+    cfg = load(tmp_path / "team.toml")
+    got = {(e.title, e.date.isoformat() if e.title != "scrimmage" else "-") for e in cfg.events}
+    assert got == {("vs North", "2026-09-12"), ("scrimmage", "-")}   # empty folder skipped
+    assert all(e.photo_files() == ["a.jpg"] for e in cfg.events)
+
+
+def test_missing_photo_folder_says_how_to_fix(project):
+    cfg, _ = project
+    e = cfg.events[0]
+    e.photos = e.photos.parent / "nope"
+    with pytest.raises(ConfigError, match="photos ="):
+        e.photo_files()

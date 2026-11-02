@@ -39,20 +39,43 @@ The demo team's players are illustrations, not real people. It's built by
 
 ## Quick start
 
-Requires Python 3.10+ and 4 GB of RAM. The biggest games, around 20,000
-detected faces, need most of that.
+Requires **Python 3.10 to 3.14** (the face model's runtime, ONNX Runtime, has no
+builds for 3.15 yet) and 4 GB of RAM. The biggest games, around 20,000 detected
+faces, need most of that. Check your version with `python3 --version`.
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv ~/.venvs/tps && source ~/.venvs/tps/bin/activate
 pip install team-photo-sorter            # HEIC photos from iPhones: "team-photo-sorter[heic]"
-
-mkdir my-team && cd my-team
-tps init                                 # writes team.toml and a .gitignore
 ```
 
-Put each game's photos in its own folder, then edit `team.toml`: team name,
-colours, roster, and one `[[event]]` per game pointing at its folder. The
-comments in [the example config](https://github.com/andyknosp1/team-photo-sorter/blob/main/examples/team.toml) explain every setting.
+On a Mac whose `python3` is 3.15, or the old 3.9 from Apple's developer tools,
+install a supported one with [Homebrew](https://brew.sh) and use it instead:
+
+```bash
+brew install python@3.13
+python3.13 -m venv ~/.venvs/tps && source ~/.venvs/tps/bin/activate
+pip install team-photo-sorter
+```
+
+In a new Terminal window, run `source ~/.venvs/tps/bin/activate` again before
+using `tps`.
+
+Then make a folder for your team, with one subfolder of photos per game:
+
+```
+my-team/
+  photos/
+    2026-09-12 vs North/      IMG_0001.JPG, IMG_0002.JPG, ...
+    2026-09-19 at South/
+```
+
+```bash
+cd my-team
+tps init       # writes team.toml with one game per photos/ subfolder
+```
+
+Then edit `team.toml`: team name, colours and roster, and check the game titles
+and dates `tps init` filled in from your folder names. The comments in [the example config](https://github.com/andyknosp1/team-photo-sorter/blob/main/examples/team.toml) explain every setting.
 
 ```bash
 tps all            # scan faces, group them, make thumbnails, build the site
@@ -65,7 +88,7 @@ offline. To skip the prompt, set the `TPS_PASSWORD` environment variable.
 The site is in `site/public/`. Deploy that folder to any static host; see
 [docs/hosting.md](https://github.com/andyknosp1/team-photo-sorter/blob/main/docs/hosting.md). Share the link and the password with families.
 
-The first run downloads InsightFace's face models (a few hundred MB) into
+The first scan downloads InsightFace's face models (about 280 MB, once) into
 `~/.insightface`. Check their licence; see [NOTICE](https://github.com/andyknosp1/team-photo-sorter/blob/main/NOTICE).
 
 Tested with InsightFace 1.0.1. InsightFace 2.x reworked its API and isn't
@@ -76,7 +99,7 @@ supported yet.
 ```bash
 git clone https://github.com/andyknosp1/team-photo-sorter.git
 cd team-photo-sorter
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]" && pytest
 ```
 
@@ -90,7 +113,7 @@ byte for byte, so a redeploy uploads only the new game.
 
 | Command | What it does |
 |---|---|
-| `tps init` | Write an example `team.toml` and `.gitignore` in the current folder |
+| `tps init` | Write `team.toml` (one game per `photos/` subfolder) and a `.gitignore` |
 | `tps scan [--event ID] [--workers N]` | Detect and embed faces in new photos (resumable) |
 | `tps cluster [--event ID]` | Group each game's faces into player tiles |
 | `tps images [--event ID]` | Make face crops, contact-sheet thumbnails and viewer copies |

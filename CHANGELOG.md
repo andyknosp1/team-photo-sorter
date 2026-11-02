@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.2 — 2026-11-02
+
+- `tps init` creates one game per subfolder of `./photos`, taking the date and title from
+  folder names like `2026-09-12 vs North`
+- The face models are downloaded once before scanning starts (previously every worker
+  downloaded them at the same time)
+- Quieter output: no per-worker model messages or dependency deprecation warnings, and
+  workers shut down cleanly
+- The progress rate counts scanning time only, not model start-up
+- Clearer error when an event's photo folder is missing
+- Python 3.10–3.14 (ONNX Runtime has no 3.15 builds yet); Mac install steps in the README
+
 ## 0.1.1 — 2026-11-02
 
 - Published on PyPI: `pip install team-photo-sorter`
