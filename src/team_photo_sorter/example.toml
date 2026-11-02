@@ -1,0 +1,62 @@
+# team-photo-sorter project file. Paths are relative to this file.
+# The site password is never stored here: `tps build` asks for it
+# (or reads the TPS_PASSWORD environment variable).
+
+[team]
+name = "Lakeview Girls Varsity Water Polo"   # small line above the title
+title = "Lakeview Water Polo"                # big title; the event title goes under it
+season = "Fall 2026"
+# intro = "One or two sentences shown under the title."
+# logo = "logo.png"                           # png, jpg or svg, shown on the gate and banner
+primary = "#1f3a5f"                          # banner colour (#rrggbb)
+accent = "#f2b33d"                           # buttons and highlights
+
+# The dropdown families use to name a tile. Numbers can be "1", "1B", etc.
+[[roster]]
+number = 1
+name = "Alex Rivera"
+year = "Jr."
+
+[[roster]]
+number = 2
+name = "Sam Chen"
+year = "Sr."
+
+# One [[event]] per game, tournament day or other shoot: a folder of photos.
+# Split long tournaments into one event per day (see docs/how-it-works.md).
+[[event]]
+id = "2026-09-12-north"        # stable id: letters, digits, - _ .
+title = "vs North"             # shown as "Lakeview Water Polo vs North"
+date = 2026-09-12
+photos = "photos/2026-09-12 vs North"
+# links = "links/2026-09-12.csv"   # optional: filename,view_url,download_url
+                                    # to link each photo to where it is already hosted
+
+[[event]]
+id = "2026-09-19-south-tournament-day-1"
+title = "at the South Tournament · Day 1"
+date = 2026-09-19
+photos = "photos/2026-09-19 South Tournament Day 1"
+
+# Optional: pre-name one player everywhere from a few reference photos of
+# their face (a folder of 5-30 photos where they are the largest face).
+# [[seed]]
+# number = 1
+# reference = "reference/alex"
+# threshold = 0.57              # check the matches before trusting a lower value
+
+[cluster]
+min_face_width = 0.02   # ignore faces narrower than 2% of the frame
+cut = 0.50              # lower = stricter groups, more splits
+min_faces = 6
+min_frames = 5
+max_tiles = 48          # tiles shown per event
+
+[site]
+out = "site"            # the deployable files go in site/public
+thumb_width = 240       # contact-sheet thumbnail width (px)
+full_size = 1280        # longest side of the in-site viewer copy; 0 = none
+page_size = 48          # thumbnails per contact-sheet page
+
+# [models]
+# root = "~/.insightface"   # where InsightFace keeps its model files

@@ -1,0 +1,16 @@
+# Private working data: face embeddings, thumbnails, salt. Never commit.
+.tps/
+# Build output (deploy it, don't commit it)
+/site/
+# Your photos, reference photos and project file stay out of the repo
+/photos/
+/reference/
+/team.toml
+
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.venv/
+dist/
+build/
+.DS_Store

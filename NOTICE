@@ -1,0 +1,19 @@
+team-photo-sorter
+Copyright 2026 Andy Knosp
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Third-party components (not included in this repository)
+--------------------------------------------------------
+
+Face detection and recognition use InsightFace (https://github.com/deepinsight/insightface)
+and its "buffalo_l" model pack (SCRFD detector, ArcFace recognizer). The model files are
+downloaded separately by InsightFace on first use and are NOT distributed with this project.
+InsightFace publishes its pretrained models for non-commercial research use; check the
+current terms in the InsightFace repository before any other use.
+
+Runtime libraries installed from PyPI keep their own licences: NumPy, SciPy, Pillow,
+cryptography, onnxruntime, InsightFace and tomli.
+
+The generated site loads the Antonio, Karla and IBM Plex Mono typefaces from Google Fonts
+(SIL Open Font License 1.1).

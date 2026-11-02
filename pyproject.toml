@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "team-photo-sorter"
+version = "0.1.0"
+description = "Sort a team photographer's photos by player and publish them as a password-protected static site."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Andy Knosp" }]
+requires-python = ">=3.10"
+keywords = ["face clustering", "sports", "photos", "static site", "insightface"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Multimedia :: Graphics",
+]
+dependencies = [
+  "numpy>=1.24",
+  "scipy>=1.10",
+  "pillow>=10",
+  "cryptography>=41",
+  "insightface>=0.7.3",
+  "onnxruntime>=1.16",
+  "tomli>=2; python_version < '3.11'",
+]
+
+[project.urls]
+Homepage = "https://github.com/andyknosp1/team-photo-sorter"
+Issues = "https://github.com/andyknosp1/team-photo-sorter/issues"
+
+[project.optional-dependencies]
+heic = ["pillow-heif>=0.15"]
+dev = ["pytest>=7"]
+
+[project.scripts]
+tps = "team_photo_sorter.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+team_photo_sorter = ["template/*.html", "example.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive,noimageindex">
+<meta name="referrer" content="no-referrer">
+<title>__TEAM_TITLE__ Photos</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;600;700&family=Karla:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:__GROUND__; --surface:#ffffff; --sunk:__SUNK__;
+  --ink:__INK__; --ink-2:__INK_2__; --ink-3:__INK_3__;
+  --line:__LINE__; --line-soft:__LINE_SOFT__;
+  --band:__BAND__; --band-2:__BAND_2__; --on-band:__ON_BAND__; --on-band-2:__ON_BAND_2__;
+  --purple:__LINK__; --gold:__ACCENT__; --gold-ink:__ACCENT_INK__; --gold-soft:__ACCENT_SOFT__;
+  --on-gold:__ON_ACCENT__;
+  --shadow:0 1px 0 rgba(0,0,0,.05), 0 8px 24px -16px rgba(0,0,0,.45);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:__D_GROUND__; --surface:__D_SURFACE__; --sunk:__D_SUNK__;
+    --ink:__D_INK__; --ink-2:__D_INK_2__; --ink-3:__D_INK_3__;
+    --line:__D_LINE__; --line-soft:__D_LINE_SOFT__;
+    --band:__D_BAND__; --band-2:__D_BAND_2__; --on-band-2:__D_ON_BAND_2__;
+    --purple:__D_LINK__; --gold:__D_ACCENT__; --gold-ink:__D_ACCENT__; --gold-soft:__D_ACCENT_SOFT__;
+    --shadow:0 1px 0 rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.95);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:__D_GROUND__; --surface:__D_SURFACE__; --sunk:__D_SUNK__;
+  --ink:__D_INK__; --ink-2:__D_INK_2__; --ink-3:__D_INK_3__;
+  --line:__D_LINE__; --line-soft:__D_LINE_SOFT__;
+  --band:__D_BAND__; --band-2:__D_BAND_2__; --on-band-2:__D_ON_BAND_2__;
+  --purple:__D_LINK__; --gold:__D_ACCENT__; --gold-ink:__D_ACCENT__; --gold-soft:__D_ACCENT_SOFT__;
+  --shadow:0 1px 0 rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.95);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font:400 16px/1.55 Karla,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;text-wrap:balance}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+@media (max-width:560px){.wrap{padding:0 16px}}
+
+.banner{background:var(--band);color:var(--on-band);
+  background-image:linear-gradient(var(--band),var(--band-2))}
+.bin{max-width:1140px;margin:0 auto;padding:30px 24px 34px;
+  display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+@media (max-width:560px){.bin{padding:24px 16px 26px}}
+.crest{flex:0 0 auto;width:78px;height:78px;display:block}
+.bt{flex:1 1 340px;min-width:0}
+.kick{font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:9px}
+h1{font-family:Antonio,"Arial Narrow",sans-serif;font-weight:700;
+  font-size:clamp(31px,5.2vw,52px);line-height:.96;text-transform:uppercase;
+  color:var(--on-band)}
+h1 em{font-style:normal;color:var(--gold)}
+.bsub{margin:11px 0 0;max-width:62ch;font-size:15.5px;color:var(--on-band-2)}
+.bsub b{color:var(--on-band);font-weight:500}
+
+.shead{margin:38px 0 0;display:flex;gap:18px;align-items:flex-end;
+  justify-content:space-between;flex-wrap:wrap;
+  border-bottom:2px solid var(--purple);padding-bottom:10px}
+.shead h2{font-family:Antonio,sans-serif;font-weight:600;font-size:24px;
+  text-transform:uppercase;letter-spacing:.02em}
+.shead p{margin:5px 0 0;color:var(--ink-2);font-size:14.5px;max-width:58ch}
+.meta{display:flex;align-items:center;gap:12px;white-space:nowrap}
+.tally{font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3)}
+.linkish{background:none;border:0;padding:0;cursor:pointer;color:var(--purple);
+  font:500 12.5px/1 Karla,sans-serif;text-decoration:underline}
+.linkish:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+.follow{display:flex;align-items:center;gap:9px}
+.follow label{font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+.follow select{width:auto;min-width:190px}
+
+/* game picker */
+.games{display:grid;gap:8px;margin:16px 0 0;
+  grid-template-columns:repeat(auto-fill,minmax(196px,1fr))}
+@media (max-width:560px){.games{grid-template-columns:1fr 1fr}}
+.game{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;
+  gap:5px;padding:10px 12px 11px;background:var(--surface);border:1px solid var(--line);
+  border-radius:4px;min-width:0;transition:border-color .14s ease,background .14s ease}
+.game:hover{border-color:var(--purple)}
+.game:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+.game .d{font:500 10.5px/1 "IBM Plex Mono",monospace;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3)}
+.game .e{font-family:Antonio,sans-serif;font-weight:600;font-size:16.5px;line-height:1.08;
+  text-transform:uppercase;color:var(--ink)}
+.game .c{font:400 12px/1.2 Karla,sans-serif;color:var(--ink-2);
+  font-variant-numeric:tabular-nums}
+.game .f{align-self:flex-start;font:600 11.5px/1 Karla,sans-serif;color:var(--gold-ink);
+  background:var(--gold-soft);border-radius:2px;padding:4px 6px;
+  font-variant-numeric:tabular-nums}
+.game.on{background:var(--band);border-color:var(--band)}
+.game.on .d{color:var(--gold)} .game.on .e{color:var(--on-band)}
+.game.on .c{color:var(--on-band-2)}
+.game.on .f{background:var(--gold);color:var(--on-gold)}
+
+.roster{display:grid;gap:15px;margin:20px 0 0;
+  grid-template-columns:repeat(auto-fill,minmax(238px,1fr))}
+@media (max-width:560px){
+  .roster{grid-template-columns:1fr 1fr;gap:10px}
+  .body{padding:10px 9px 10px;gap:8px}
+  .cap{width:26px;height:26px;font-size:14px}
+  .nm .n{font-size:15.5px} .nm .y{font-size:10.5px}
+  select{font-size:13px;padding:6px 5px}
+  .frames-n b{font-size:18px}
+  .follow{width:100%} .follow select{flex:1 1 auto;min-width:0}
+}
+.loading{margin:22px 0 0;font:500 12px/1.4 "IBM Plex Mono",monospace;color:var(--ink-3)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:4px;
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:border-color .14s ease,box-shadow .14s ease,opacity .14s ease}
+.card.on{border-color:var(--purple);box-shadow:var(--shadow)}
+.card.out{display:none}
+.card.out.peek{display:flex;opacity:.5}
+.pick{all:unset;display:block;cursor:pointer}
+.pick:focus-visible{outline:2px solid var(--purple);outline-offset:-2px}
+.mosaic{display:grid;grid-template-columns:repeat(4,1fr);background:var(--sunk)}
+.mosaic img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.body{padding:12px 13px 13px;display:flex;flex-direction:column;gap:10px}
+.who{display:flex;align-items:center;gap:9px;min-width:0}
+.cap{flex:0 0 auto;width:32px;height:32px;border-radius:50%;
+  background:var(--band);color:var(--gold);display:grid;place-items:center;
+  font-family:Antonio,sans-serif;font-weight:700;font-size:17px;line-height:1;
+  font-variant-numeric:tabular-nums}
+.cap.blank{background:var(--sunk);color:var(--ink-3);font-size:15px}
+.cap.no{background:var(--sunk);color:var(--ink-3);font-size:13px}
+.nm{min-width:0;flex:1 1 auto}
+.nm .n{font-family:Antonio,sans-serif;font-weight:600;font-size:19px;
+  line-height:1.05;text-transform:uppercase;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.nm .y{font:400 11.5px/1.3 "IBM Plex Mono",monospace;color:var(--ink-3)}
+select{width:100%;font:400 13.5px/1.2 Karla,sans-serif;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:7px 8px;cursor:pointer}
+select:focus-visible{outline:2px solid var(--purple);outline-offset:1px}
+.frames-n{font:400 13px/1 Karla,sans-serif;color:var(--ink-2);
+  display:flex;align-items:baseline;gap:6px}
+.frames-n b{font-family:Antonio,sans-serif;font-weight:600;font-size:22px;
+  color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+.xs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:8px 9px;
+  background:var(--gold-soft);border-radius:3px;font-size:12.5px;line-height:1.3;color:var(--ink)}
+.xs[hidden]{display:none}
+.xs span{flex:1 1 100%}
+.xs button{font:600 12px/1 Karla,sans-serif;padding:6px 9px;border-radius:3px;cursor:pointer;
+  border:1px solid var(--gold-ink);background:transparent;color:var(--gold-ink)}
+.xs button.y{background:var(--gold);border-color:var(--gold);color:var(--on-gold)}
+.xs button:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+
+.detail{margin-top:22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:4px;box-shadow:var(--shadow);overflow:hidden}
+.dhead{padding:18px 22px;background:var(--band);color:var(--on-band);
+  display:flex;flex-wrap:wrap;gap:16px;align-items:center;
+  justify-content:space-between}
+.dhead h3{font-family:Antonio,sans-serif;font-weight:700;font-size:27px;
+  text-transform:uppercase;line-height:1;display:flex;align-items:center;gap:11px}
+.dhead .sub{margin:6px 0 0;font-size:14px;color:var(--on-band-2)}
+.acts{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+button.go,a.go{font:600 13px/1 Karla,sans-serif;padding:10px 15px;border-radius:3px;
+  border:1px solid var(--gold);background:var(--gold);color:var(--on-gold);cursor:pointer;
+  text-decoration:none;display:inline-block}
+button.go[disabled]{opacity:.5;cursor:default}
+button.go.ghost,a.go.ghost{background:transparent;color:var(--on-band);
+  border-color:var(--on-band-2)}
+button.go:focus-visible,a.go:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.prog{font:500 12px/1.4 "IBM Plex Mono",monospace;color:var(--on-band-2);
+  max-width:34ch}
+.dbody{padding:18px 22px 22px;display:flex;flex-direction:column;gap:14px}
+@media (max-width:560px){.dhead,.dbody{padding-left:14px;padding-right:14px}}
+.sheetbar{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  flex-wrap:wrap}
+.lab{font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3)}
+.pager{display:flex;align-items:center;gap:10px}
+.pager span{font:500 12px/1 "IBM Plex Mono",monospace;color:var(--ink-2);
+  font-variant-numeric:tabular-nums}
+.pg{font:600 15px/1 Karla,sans-serif;width:30px;height:30px;border-radius:3px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  cursor:pointer}
+.pg[disabled]{opacity:.35;cursor:default}
+.pg:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+.sheet{display:grid;gap:8px;
+  grid-template-columns:repeat(auto-fill,minmax(126px,1fr))}
+@media (max-width:560px){.sheet{grid-template-columns:repeat(2,1fr)}}
+.cell{margin:0;background:var(--sunk);border-radius:3px;overflow:hidden;
+  display:flex;flex-direction:column}
+.cell a.shot{display:block;line-height:0}
+.cell a.shot:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.cell img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;background:var(--sunk);
+  transition:opacity .12s ease}
+.cell img:not([src]){opacity:0}
+.cell a.shot:hover img{opacity:.82}
+.cell .miss{width:100%;aspect-ratio:3/2;display:grid;place-items:center;
+  color:var(--ink-3);font:400 11px/1 "IBM Plex Mono",monospace}
+.cap2{display:flex;align-items:center;justify-content:space-between;gap:4px;
+  padding:5px 6px 5px 7px;background:var(--surface);
+  border-top:1px solid var(--line-soft)}
+.cap2 span{font:400 11px/1 "IBM Plex Mono",monospace;color:var(--ink-2);
+  font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cap2 a{font:600 12px/1 Karla,sans-serif;color:var(--gold-ink);
+  text-decoration:none;padding:3px 5px;border-radius:2px}
+.cap2 a:hover{background:var(--gold);color:var(--on-gold)}
+.cap2 a:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.hint{margin:0;font-size:13.5px;color:var(--ink-2)}
+.hint b{color:var(--ink);font-weight:600}
+footer{margin:40px 0 0;padding:16px 0 46px;border-top:1px solid var(--line);
+  font:400 12px/1.6 "IBM Plex Mono",monospace;color:var(--ink-3);
+  display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between}
+footer .linkish{font:500 12px/1.6 "IBM Plex Mono",monospace}
+.sugg{border:1px solid var(--line);border-radius:4px;padding:12px 14px;
+  background:var(--sunk);display:flex;flex-direction:column;gap:10px}
+.sugg h4{margin:0;font:600 14px/1.3 Karla,sans-serif;color:var(--ink)}
+.sugg p{margin:0;font-size:13px;color:var(--ink-2)}
+.sgrid{display:flex;flex-wrap:wrap;gap:10px}
+.scard{display:flex;align-items:center;gap:8px;background:var(--surface);
+  border:1px solid var(--line-soft);border-radius:3px;padding:6px 8px 6px 6px}
+.scard img{width:44px;height:44px;object-fit:cover;border-radius:2px;display:block}
+.scard .meta{font:400 11.5px/1.3 "IBM Plex Mono",monospace;color:var(--ink-3);white-space:normal}
+.scard button{font:600 12px/1 Karla,sans-serif;padding:7px 9px;border-radius:3px;
+  border:1px solid var(--purple);background:transparent;color:var(--purple);cursor:pointer}
+.scard button:hover{background:var(--purple);color:var(--surface)}
+.scard button:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+
+.gate{position:fixed;inset:0;z-index:50;display:grid;place-items:center;
+  padding:24px;background:var(--band);
+  background-image:linear-gradient(var(--band),var(--band-2))}
+.gate .box{width:100%;max-width:380px;text-align:center;color:var(--on-band)}
+.gate img{width:96px;height:96px;margin:0 auto 20px;display:block}
+.gate h2{font-family:Antonio,sans-serif;font-weight:700;font-size:27px;
+  text-transform:uppercase;line-height:1;color:var(--on-band)}
+.gate p{margin:10px 0 22px;font-size:14.5px;color:var(--on-band-2)}
+.gate form{display:flex;gap:8px}
+.gate input{flex:1 1 auto;min-width:0;font:400 15px/1.2 Karla,sans-serif;
+  padding:11px 12px;border-radius:3px;border:1px solid var(--on-band-2);
+  background:rgba(255,255,255,.08);color:var(--on-band)}
+.gate input::placeholder{color:var(--on-band-2)}
+.gate input:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.gate .err{margin:14px 0 0;font:500 13px/1.4 Karla,sans-serif;color:var(--gold);
+  min-height:1.4em}
+.hidden{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.sugg[hidden]{display:none}
+/* in-site viewer */
+.lb{position:fixed;inset:0;z-index:40;background:rgba(8,6,12,.92);display:flex;
+  flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:12px}
+.lb[hidden]{display:none}
+.lb img{max-width:100%;max-height:calc(100vh - 110px);object-fit:contain;display:block;
+  border-radius:2px;background:#000}
+.lb .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;
+  color:#eee;font:500 12px/1 "IBM Plex Mono",monospace}
+.lb button,.lb a{font:600 13px/1 Karla,sans-serif;padding:9px 13px;border-radius:3px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;text-decoration:none}
+.lb a.dl{background:var(--gold);border-color:var(--gold);color:var(--on-gold)}
+.lb button:focus-visible,.lb a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.cell button.shot{all:unset;display:block;line-height:0;cursor:zoom-in}
+.cell button.shot:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.crest[src=""],.gate img[src=""]{display:none}
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate"><div class="box">
+  <img src="__LOGO__" alt="">
+  <h2>__TEAM_TITLE__ Photos</h2>
+  <p>Team families only. Enter the password the team shared with you.</p>
+  <form id="gate-form">
+    <input id="gate-pw" type="password" placeholder="Password"
+           autocomplete="current-password" aria-label="Password">
+    <button class="go" type="submit" id="gate-go">Unlock</button>
+  </form>
+  <p class="err" id="gate-err" role="status"></p>
+</div></div>
+
+<div id="app" class="hidden">
+<div class="banner"><div class="bin">
+  <img class="crest" src="__LOGO__" alt="">
+  <div class="bt">
+    <div class="kick">__TEAM_NAME__ · __SEASON__</div>
+    <h1>__TEAM_TITLE__<br><em id="vs"></em></h1>
+    <p class="bsub">__INTRO__</p>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <div class="shead">
+    <div>
+      <h2>Choose a game</h2>
+      <p id="season"></p>
+    </div>
+    <div class="follow">
+      <label for="follow">Following</label>
+      <select id="follow"></select>
+    </div>
+  </div>
+  <div class="games" id="games"></div>
+
+  <div class="shead">
+    <div>
+      <h2>Pick your player</h2>
+      <p>Each tile is one person the sorter grouped across this game. Find your
+        player, put their name on the tile, and their whole contact sheet opens below.</p>
+    </div>
+    <div class="meta">
+      <span class="tally" id="tally"></span>
+      <button class="linkish" id="peek" type="button" hidden></button>
+    </div>
+  </div>
+  <p class="loading" id="loading" hidden>Loading this game…</p>
+  <div class="roster" id="roster"></div>
+
+  <div class="detail" id="detail" hidden>
+    <div class="dhead">
+      <div>
+        <h3><span class="cap blank" id="d-cap">?</span><span id="d-title">Player A</span></h3>
+        <p class="sub" id="d-sub"></p>
+      </div>
+      <div class="acts">
+        <button class="go" id="d-dl" type="button">Download all</button>
+        <button class="go ghost" id="d-copy" type="button">Copy file names</button>
+        <span class="prog" id="d-prog" hidden></span>
+      </div>
+    </div>
+    <div class="dbody">
+      <p class="hint" id="d-hint"></p>
+      <div class="sugg" id="d-sugg" hidden></div>
+      <div class="sheetbar">
+        <span class="lab" id="d-lab">Contact sheet</span>
+        <div class="pager">
+          <button class="pg" id="pg-prev" type="button" aria-label="Previous page">&#8249;</button>
+          <span id="pg-lab">1–48</span>
+          <button class="pg" id="pg-next" type="button" aria-label="Next page">&#8250;</button>
+        </div>
+      </div>
+      <div class="sheet" id="d-sheet"></div>
+    </div>
+  </div>
+
+  <footer>
+    <span id="foot"></span>
+    <span><button class="linkish" id="share" type="button">Share my labels</button>
+      <span id="share-msg"></span></span>
+  </footer>
+</div>
+</div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <img id="lb-img" alt="">
+  <div class="bar">
+    <button type="button" id="lb-prev" aria-label="Previous photo">&#8249; Prev</button>
+    <span id="lb-lab"></span>
+    <a class="dl" id="lb-dl" href="#" download>Save photo</a>
+    <button type="button" id="lb-next" aria-label="Next photo">Next &#8250;</button>
+    <button type="button" id="lb-close">Close</button>
+  </div>
+</div>
+
+<script>
+const ITER = __ITER__, PAYLOAD = "__PAYLOAD__", TEAM = __TEAM_JSON__;
+const LET = "ABCDEFGHJKLMNPQRSTUVWXYZ", NOT = "-";
+let PAGE = 48;
+const $ = id => document.getElementById(id);
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let KEY = null, IDX = null, G = null, BLOB = null;
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+
+async function unseal(buf){
+  return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM', iv:buf.subarray(0,12)},
+                                                    KEY, buf.subarray(12)));
+}
+async function fetchOpen(rel){
+  const r = await fetch(rel);
+  if (!r.ok) throw new Error(rel + ' ' + r.status);
+  return unseal(new Uint8Array(await r.arrayBuffer()));
+}
+async function unlock(pw){
+  const raw = b64(PAYLOAD);
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw),
+    'PBKDF2', false, ['deriveKey']);
+  KEY = await crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt:raw.subarray(0,16), iterations:ITER, hash:'SHA-256'},
+    base, {name:'AES-GCM', length:256}, false, ['decrypt']);
+  IDX = JSON.parse(new TextDecoder().decode(await unseal(raw.subarray(16))));
+}
+
+/* ---------- labels: per event and tile layout; seeds are the organiser's ---------- */
+const evBy = {}, byNum = {};
+const nkey = gid => 'tps:' + gid + ':' + evBy[gid].ver;
+const rkey = gid => 'tps:rej:' + gid + ':' + evBy[gid].ver;
+const labelsCache = {};
+const labels = gid => labelsCache[gid] || (labelsCache[gid] = store.get(nkey(gid), {}));
+const nameOf = (gid, k) => {
+  const L = labels(gid);
+  if (k in L) return L[k];
+  return (IDX.seeds[gid] || {})[k] || "";
+};
+const skey = gid => 'tps:sig:' + gid + ':' + evBy[gid].ver;
+const setName = (gid, k, v) => {
+  labels(gid)[k] = v; store.set(nkey(gid), labels(gid));
+  if (G && G.gid === gid && G.tiles && G.tiles[k]) {   // remember the tile's signature for sharing
+    const s = store.get(skey(gid), {}); s[k] = G.tiles[k].r; store.set(skey(gid), s);
+  }
+};
+const first = p => p.name.split(' ')[0];
+
+function boot(){
+  PAGE = IDX.page || 48;
+  IDX.roster.forEach(p => byNum[p.num] = p);
+  IDX.events.forEach(g => evBy[g.gid] = g);
+  const total = IDX.events.reduce((a,g) => a + g.total, 0);
+  $('season').textContent = IDX.events.length + (IDX.events.length === 1 ? ' game, ' : ' games, ') +
+    total.toLocaleString() + ' photos so far this season.';
+  const fol = $('follow');
+  fol.innerHTML = '<option value="">Nobody yet</option>' +
+    IDX.roster.map(p => `<option value="${esc(p.num)}">${esc(p.num)} · ${esc(p.name)}</option>`).join('');
+  fol.value = store.get('tps:follow', "");
+  fol.addEventListener('change', () => { store.set('tps:follow', fol.value); drawGames(); });
+  drawGames();
+  const want = location.hash.slice(1), last = store.get('tps:last', "");
+  loadGame(evBy[want] ? want : evBy[last] ? last : IDX.events[IDX.events.length-1].gid);
+  window.addEventListener('hashchange', () => {
+    const g = location.hash.slice(1);
+    if (evBy[g] && (!G || G.gid !== g)) loadGame(g);
+  });
+  $('share').addEventListener('click', shareLabels);
+}
+
+function followCount(g){
+  const f = $('follow').value; if (!f) return 0;
+  let n = 0;
+  g.tf.forEach((c,k) => { if (nameOf(g.gid, k) === f) n += c; });
+  return n;
+}
+function drawGames(){
+  const p = byNum[$('follow').value];
+  $('games').innerHTML = IDX.events.map(g => {
+    const n = followCount(g);
+    const tag = p && n ? `<span class="f">${esc(first(p))} · ${n.toLocaleString()}</span>` : '';
+    return `<button class="game${G && G.gid === g.gid ? ' on' : ''}" type="button" data-g="${g.gid}">
+      <span class="d">${esc(g.dlabel)}</span><span class="e">${esc(g.title)}</span>
+      <span class="c">${g.total.toLocaleString()} photos · ${g.ntiles} faces</span>${tag}</button>`;
+  }).join('');
+  $('games').querySelectorAll('.game').forEach(b =>
+    b.addEventListener('click', () => loadGame(b.dataset.g, true)));
+}
+
+/* ---------- encrypted images, fetched only when shown ---------- */
+const urls = new Map();
+let gen = 0;
+async function imageUrl(dir, t){
+  const key = dir + t;
+  if (!urls.has(key)) {
+    const b = await fetchOpen(dir + '/' + t.slice(0,2) + '/' + t.slice(2) + '.bin');
+    urls.set(key, URL.createObjectURL(new Blob([b], {type:'image/jpeg'})));
+  }
+  return urls.get(key);
+}
+async function thumbsFor(cells, my){
+  let i = 0;
+  const work = async () => {
+    while (i < cells.length && my === gen) {
+      const img = cells[i++];
+      try { const u = await imageUrl('t', img.dataset.t); if (my === gen) img.src = u; }
+      catch(e) { img.alt = 'not available'; }
+    }
+  };
+  await Promise.all(Array.from({length:6}, work));
+}
+const crops = new Map();
+function cropUrl(i){
+  if (crops.has(i)) return crops.get(i);
+  const [off, len] = G.images[i];
+  const u = URL.createObjectURL(new Blob([BLOB.subarray(off, off+len)], {type:'image/jpeg'}));
+  crops.set(i, u); return u;
+}
+
+let cur = -1, page = 0, peeking = false, curPhotos = [];
+async function loadGame(gid, scroll){
+  if (G && G.gid === gid) return;
+  gen++;
+  store.set('tps:last', gid);
+  if (location.hash.slice(1) !== gid) history.replaceState(null, '', '#' + gid);
+  const meta = evBy[gid];
+  $('vs').textContent = meta.title;
+  document.title = TEAM + ' ' + meta.title;
+  $('roster').innerHTML = ''; $('detail').hidden = true; $('tally').textContent = '';
+  $('loading').hidden = false; $('loading').textContent = 'Loading ' + meta.title + '…';
+  G = { gid }; drawGames();
+  let plain;
+  try { plain = await fetchOpen('d/' + gid + '.bin'); }
+  catch(e) { $('loading').textContent = 'This game did not load. Check your connection and pick it again.'; G = null; return; }
+  if (!G || G.gid !== gid) return;
+  const n = new DataView(plain.buffer, plain.byteOffset).getUint32(0);
+  G = JSON.parse(new TextDecoder().decode(plain.subarray(4, 4+n)));
+  BLOB = plain.subarray(4+n);
+  crops.forEach(u => URL.revokeObjectURL(u)); crops.clear();
+  $('loading').hidden = true;
+  $('foot').textContent = TEAM + ' · ' + G.dlabel + ' · only small, encrypted copies of the photos live on this page.';
+  cur = -1; peeking = false;
+  drawRoster();
+  const fol = $('follow').value;
+  let start = fol ? G.tiles.findIndex((_,k) => nameOf(gid,k) === fol) : -1;
+  if (start < 0) start = G.tiles.findIndex((_,k) => nameOf(gid,k) !== NOT);
+  if (start >= 0) select(start, false);
+  else if (!G.tiles.length) { $('loading').hidden = false; $('loading').textContent = 'No faces were grouped for this game.'; }
+  tally();
+  if (scroll) $('roster').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ---------- player tiles ---------- */
+const tag = k => 'Player ' + (LET[k] || ('#' + k));
+const options = () => ['<option value="">Not named yet</option>']
+  .concat(IDX.roster.map(p => `<option value="${esc(p.num)}">${esc(p.num)} · ${esc(p.name)}</option>`))
+  .concat([`<option value="${NOT}">Not on the team — hide</option>`]).join('');
+function crossGuess(k){
+  if (nameOf(G.gid, k)) return null;
+  const rej = store.get(rkey(G.gid), {})[k] || [];
+  for (const [g2, j] of G.tiles[k].x) {
+    if (!evBy[g2]) continue;
+    const v = nameOf(g2, j);
+    if (v && v !== NOT && byNum[v] && !rej.includes(v)) return { num:v, ev:evBy[g2] };
+  }
+  return null;
+}
+function drawRoster(){
+  const roster = $('roster'); roster.innerHTML = '';
+  G.tiles.forEach((c,k) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      `<div class="pick" role="button" tabindex="0" aria-label="Show ${tag(k)}"><div class="mosaic">` +
+        c.m.map(r => `<img alt="" src="${cropUrl(r)}">`).join('') +
+      `</div></div>
+       <div class="body">
+         <div class="who">
+           <div class="cap blank">?</div>
+           <div class="nm"><div class="n"></div><div class="y"></div></div>
+         </div>
+         <div class="xs" hidden></div>
+         <select aria-label="Name this player"></select>
+         <div class="frames-n"><b>${c.p.length}</b>frames</div>
+       </div>`;
+    const sel = card.querySelector('select');
+    sel.innerHTML = options();
+    sel.value = nameOf(G.gid, k);
+    sel.addEventListener('change', () => rename(k, sel.value));
+    const hit = card.querySelector('.pick');
+    hit.addEventListener('click', () => select(k, true));
+    hit.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(k, true); }
+    });
+    roster.appendChild(card);
+    paint(k);
+  });
+}
+function rename(k, v){
+  setName(G.gid, k, v);
+  const sel = $('roster').children[k].querySelector('select'); if (sel) sel.value = v;
+  tally(); drawGames();
+  G.tiles.forEach((_,j) => paint(j));
+  if (v === NOT && cur === k) {
+    const f = G.tiles.findIndex((_,j) => nameOf(G.gid,j) !== NOT);
+    if (f >= 0) select(f, false); else $('detail').hidden = true;
+  } else if (cur === k) select(k, false);
+}
+function paint(k){
+  const card = $('roster').children[k]; if (!card) return;
+  const v = nameOf(G.gid, k), off = v === NOT, p = off ? null : byNum[v];
+  card.classList.toggle('out', off);
+  card.classList.toggle('peek', off && peeking);
+  const cap = card.querySelector('.cap');
+  cap.className = 'cap' + (p ? '' : (off ? ' no' : ' blank'));
+  cap.textContent = p ? p.num : (off ? '—' : '?');
+  card.querySelector('.n').textContent = p ? p.name : (off ? 'Not on the team' : tag(k));
+  card.querySelector('.y').textContent = p ? ('#' + p.num + (p.year ? ' · ' + p.year : ''))
+                                           : (off ? 'Hidden' : 'Not named yet');
+  const xs = card.querySelector('.xs'), g = crossGuess(k);
+  if (!g) { xs.hidden = true; xs.innerHTML = ''; return; }
+  const q = byNum[g.num];
+  xs.innerHTML = `<span>Same face as <b>${esc(q.name)}</b> ${esc(g.ev.title)}. Is it ${esc(first(q))}?</span>
+    <button class="y" type="button">Yes, ${esc(first(q))}</button><button type="button">No</button>`;
+  xs.hidden = false;
+  const [yes, no] = xs.querySelectorAll('button');
+  yes.addEventListener('click', () => rename(k, g.num));
+  no.addEventListener('click', () => {
+    const r = store.get(rkey(G.gid), {}); (r[k] = r[k] || []).push(g.num);
+    store.set(rkey(G.gid), r); paint(k);
+  });
+}
+function tally(){
+  const hid = G.tiles.filter((_,k) => nameOf(G.gid,k) === NOT).length;
+  const named = G.tiles.filter((_,k) => { const v = nameOf(G.gid,k); return v && v !== NOT; }).length;
+  $('tally').textContent = named + ' of ' + (G.tiles.length - hid) + ' named';
+  const btn = $('peek');
+  btn.hidden = hid === 0;
+  btn.textContent = (peeking ? 'Hide' : 'Show') + ' ' + hid + ' hidden';
+}
+$('peek').addEventListener('click', () => { peeking = !peeking; tally(); G.tiles.forEach((_,k) => paint(k)); });
+
+function photosFor(k){
+  const nm = nameOf(G.gid, k);
+  if (!nm || nm === NOT) return G.tiles[k].p.slice();
+  const set = new Set();
+  G.tiles.forEach((c,j) => { if (nameOf(G.gid,j) === nm) c.p.forEach(n => set.add(n)); });
+  return [...set].sort((a,b) => a - b);
+}
+function drawSugg(k){
+  const box = $('d-sugg'), nm = nameOf(G.gid, k), p = byNum[nm];
+  const opts = (G.tiles[k].s || []).filter(([j]) => !nameOf(G.gid, j));
+  if (!p || !opts.length) { box.hidden = true; box.innerHTML = ''; return; }
+  box.innerHTML = `<h4>Could these also be ${esc(p.name)}?</h4>
+    <p>The sorter sometimes splits one player into several groups — sharp shots
+       and distant ones, say. If you recognise ${esc(first(p))}, add them.</p>
+    <div class="sgrid">` + opts.map(([j]) => {
+      const c = G.tiles[j];
+      return `<div class="scard">` +
+        c.m.slice(0,2).map(r => `<img alt="" src="${cropUrl(r)}">`).join('') +
+        `<span class="meta">${tag(j)}<br>${c.p.length} frames</span>
+         <button type="button" data-k="${j}">Yes, ${esc(first(p))}</button></div>`;
+    }).join('') + `</div>`;
+  box.hidden = false;
+  box.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    rename(+b.dataset.k, nm); select(k, false);
+  }));
+}
+
+const label = n => n.replace(/\.[A-Za-z0-9]+$/, '');
+const canSave = ph => ph[2] || ph[4];   // viewer copy on the site, or an external download link
+
+function select(k, user){
+  cur = k; page = 0;
+  const p = byNum[nameOf(G.gid, k)];
+  [...$('roster').children].forEach((el,j) => el.classList.toggle('on', j === k));
+  const cap = $('d-cap');
+  cap.className = 'cap' + (p ? '' : ' blank');
+  cap.textContent = p ? p.num : '?';
+  $('d-title').textContent = p ? p.name : tag(k);
+  curPhotos = photosFor(k);
+  const tiles = p ? G.tiles.filter((_,j) => nameOf(G.gid,j) === nameOf(G.gid,k)).length : 1;
+  $('d-sub').textContent =
+    (p ? first(p) : 'This player') + ' appears in ' +
+    curPhotos.length.toLocaleString() + ' of the ' + G.total.toLocaleString() +
+    ' photos' + (tiles > 1 ? ' (' + tiles + ' groups combined).' : '.');
+  const have = curPhotos.filter(n => canSave(G.photos[n])).length;
+  const btn = $('d-dl');
+  if (!dlRun) { btn.textContent = 'Download all ' + have; btn.disabled = have === 0; }
+  btn.hidden = touch || have === 0;
+  $('d-prog').hidden = true;
+  $('detail').hidden = false;
+  drawSugg(k);
+  drawPage();
+  if (user) $('detail').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function drawPage(){
+  const total = curPhotos.length, pages = Math.max(1, Math.ceil(total / PAGE));
+  page = Math.min(Math.max(0, page), pages - 1);
+  const from = page * PAGE, to = Math.min(total, from + PAGE);
+  $('d-lab').textContent = 'Contact sheet · ' + total.toLocaleString() + ' photos';
+  $('pg-lab').textContent = (from + 1) + '–' + to + ' of ' + total;
+  $('pg-prev').disabled = page === 0;
+  $('pg-next').disabled = page >= pages - 1;
+  $('d-sheet').innerHTML = curPhotos.slice(from, to).map((n, i) => {
+    const [name, t, full, view, dl] = G.photos[n], lab = esc(label(name));
+    const shot = t ? `<img alt="${lab}" data-t="${t}">` : `<div class="miss">${lab}</div>`;
+    const top = view
+      ? `<a class="shot" href="${esc(view)}" target="_blank" rel="noopener" title="Open full size">${shot}</a>`
+      : `<button class="shot" type="button" data-i="${from + i}" title="View larger">${shot}</button>`;
+    const save = dl ? `<a href="${esc(dl)}" target="_blank" rel="noopener" title="Save the original" aria-label="Save ${lab}">&#8595;</a>`
+               : full ? `<a href="#" data-save="${from + i}" title="Save this photo" aria-label="Save ${lab}">&#8595;</a>` : '';
+    return `<figure class="cell">${top}
+              <figcaption class="cap2"><span>${lab}</span>${save}</figcaption>
+            </figure>`;
+  }).join('');
+  $('d-sheet').querySelectorAll('button.shot').forEach(b =>
+    b.addEventListener('click', () => openViewer(+b.dataset.i)));
+  $('d-sheet').querySelectorAll('a[data-save]').forEach(a =>
+    a.addEventListener('click', e => { e.preventDefault(); saveLocal(curPhotos[+a.dataset.save]); }));
+  const my = ++gen;
+  thumbsFor([...$('d-sheet').querySelectorAll('img[data-t]')], my);
+}
+$('pg-prev').addEventListener('click', () => { page--; drawPage(); });
+$('pg-next').addEventListener('click', () => { page++; drawPage(); });
+
+/* ---------- viewer and saving ---------- */
+let lbAt = -1;
+async function openViewer(i){
+  lbAt = Math.max(0, Math.min(curPhotos.length - 1, i));
+  const ph = G.photos[curPhotos[lbAt]];
+  $('lb').hidden = false;
+  $('lb-lab').textContent = label(ph[0]) + '  ·  ' + (lbAt + 1) + ' of ' + curPhotos.length;
+  $('lb-img').alt = label(ph[0]);
+  $('lb-dl').hidden = !canSave(ph);
+  const at = lbAt;
+  try {
+    $('lb-img').src = ph[1] ? await imageUrl('t', ph[1]) : '';
+    if (ph[2]) { const u = await imageUrl('f', ph[1]); if (lbAt === at) $('lb-img').src = u; }
+  } catch(e) {}
+  $('lb-close').focus();
+}
+function closeViewer(){ $('lb').hidden = true; lbAt = -1; }
+$('lb-prev').addEventListener('click', () => openViewer(lbAt - 1));
+$('lb-next').addEventListener('click', () => openViewer(lbAt + 1));
+$('lb-close').addEventListener('click', closeViewer);
+$('lb').addEventListener('click', e => { if (e.target === $('lb')) closeViewer(); });
+$('lb-dl').addEventListener('click', e => { e.preventDefault(); if (lbAt >= 0) saveLocal(curPhotos[lbAt]); });
+document.addEventListener('keydown', e => {
+  if ($('lb').hidden) return;
+  if (e.key === 'Escape') closeViewer();
+  if (e.key === 'ArrowLeft') openViewer(lbAt - 1);
+  if (e.key === 'ArrowRight') openViewer(lbAt + 1);
+});
+async function saveLocal(n){
+  const [name, t, full, , dl] = G.photos[n];
+  if (dl) { window.open(dl, '_blank', 'noopener'); return; }
+  if (!full) return;
+  const a = document.createElement('a');
+  a.href = await imageUrl('f', t);
+  a.download = label(name) + '.jpg';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+$('d-copy').addEventListener('click', () => {
+  const pr = $('d-prog');
+  navigator.clipboard.writeText(curPhotos.map(n => G.photos[n][0]).join('\n')).then(
+    () => { pr.textContent = curPhotos.length + ' file names copied.'; pr.hidden = false; },
+    () => { pr.textContent = 'Copy was blocked by the browser.'; pr.hidden = false; }
+  );
+});
+
+let dlRun = null;
+$('d-dl').addEventListener('click', async () => {
+  const btn = $('d-dl'), pr = $('d-prog');
+  pr.hidden = false;
+  if (window.self !== window.top) {
+    pr.textContent = 'Saving many files at once only works with this page open in its own tab.';
+    return;
+  }
+  if (dlRun) { dlRun.stop = true; return; }
+  const list = curPhotos.filter(n => canSave(G.photos[n]));
+  const run = dlRun = { stop:false };
+  btn.textContent = 'Stop';
+  pr.textContent = 'Your browser may ask to allow multiple downloads — say yes.';
+  for (let i = 0; i < list.length && !run.stop; i++) {
+    const ph = G.photos[list[i]];
+    if (ph[4]) {
+      const f = document.createElement('iframe');
+      f.style.display = 'none'; f.src = ph[4];
+      document.body.appendChild(f); setTimeout(() => f.remove(), 90000);
+    } else { try { await saveLocal(list[i]); } catch(e) {} }
+    pr.textContent = 'Saving ' + (i+1) + ' of ' + list.length + '…';
+    await new Promise(r => setTimeout(r, ph[4] ? 2500 : 600));
+  }
+  pr.textContent = run.stop ? 'Stopped.' : 'Saved ' + list.length + ' photos.';
+  dlRun = null;
+  if (cur >= 0) select(cur, false);
+});
+
+function shareLabels(){
+  const out = {};
+  let n = 0;
+  IDX.events.forEach(g => {
+    const L = store.get(nkey(g.gid), {}), S = store.get(skey(g.gid), {});
+    const keys = Object.keys(L).filter(k => L[k]);
+    if (!keys.length) return;
+    out[g.gid] = {};
+    keys.forEach(k => { out[g.gid][k] = [L[k], S[k] || null]; n++; });
+  });
+  const msg = $('share-msg');
+  if (!n) { msg.textContent = ' — name a few players first.'; return; }
+  navigator.clipboard.writeText('tps-labels v1 ' + JSON.stringify(out)).then(
+    () => { msg.textContent = ' — ' + n + ' labels copied. Paste them into a message to ' +
+            'whoever runs this page, and they can add them for every family.'; },
+    () => { msg.textContent = ' — copy was blocked by the browser.'; });
+}
+
+const touch = window.matchMedia('(pointer: coarse)').matches;
+$('d-hint').innerHTML = touch
+  ? 'Tap a photo to see it larger, then <b>press and hold</b> it to save it to your phone.'
+  : 'Click a photo to see it larger. The <b>&#8595;</b> under each one saves it to your ' +
+    'downloads folder.';
+
+const gerr = $('gate-err');
+$('gate-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('gate-go'), pw = $('gate-pw').value;
+  if (!pw) return;
+  if (!window.crypto || !crypto.subtle) {
+    gerr.textContent = 'This browser cannot unlock the page here. Open the https:// address ' +
+      'rather than a local copy.'; return;
+  }
+  btn.disabled = true; gerr.textContent = 'Unlocking…';
+  try { await unlock(pw); }
+  catch (err) {
+    btn.disabled = false; gerr.textContent = 'That password did not work.';
+    $('gate-pw').select(); return;
+  }
+  $('gate').remove();
+  $('app').classList.remove('hidden');
+  boot();
+});
+</script>
+</body>
+</html>
